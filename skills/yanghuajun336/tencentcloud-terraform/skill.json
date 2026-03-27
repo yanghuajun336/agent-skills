@@ -1,0 +1,8 @@
+{
+  "name": "yanghuajun336/tencentcloud-terraform",
+  "version": "1.0.0",
+  "description": "腾讯云 Terraform IaC 管理。用于创建、规划、应用和管理腾讯云基础设施资源。",
+  "author": "yanghuajun336",
+  "tags": ["terraform", "tencentcloud", "iac", "devops", "infra"],
+  "license": "MIT"
+}
