@@ -1,0 +1,185 @@
+## 全局配置，供子 chart 共享
+global:
+  imageRegistry: docker.io
+  imagePullSecrets: []
+  storageClass: ""
+
+## 镜像相关配置
+image:
+  registry: docker.io
+  repository: myapp/web
+  tag: ""  # 默认为 .Chart.AppVersion
+  pullPolicy: IfNotPresent  # 镜像拉取策略
+
+## chart 名称覆盖
+nameOverride: ""
+fullnameOverride: ""
+
+## 副本数量与修订历史
+replicaCount: 3  # 副本数
+revisionHistoryLimit: 10  # 保留历史版本数
+
+## ServiceAccount 配置
+serviceAccount:
+  create: true  # 是否创建 ServiceAccount
+  annotations: {}  # 关联注解
+  name: ""  # 指定名称
+
+## Pod 注解
+podAnnotations:
+  prometheus.io/scrape: "true"  # Prometheus 采集
+  prometheus.io/port: "9090"
+  prometheus.io/path: "/metrics"
+
+## Pod 安全上下文
+podSecurityContext:
+  runAsNonRoot: true  # 非 root 用户运行
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+  seccompProfile:
+    type: RuntimeDefault
+
+## 容器安全上下文
+securityContext:
+  allowPrivilegeEscalation: false  # 禁止权限提升
+  readOnlyRootFilesystem: true  # 只读根文件系统
+  capabilities:
+    drop:
+    - ALL
+
+## Service 配置
+service:
+  type: ClusterIP  # 服务类型
+  port: 80  # 服务端口
+  targetPort: http  # 目标端口
+  annotations: {}  # 服务注解
+  sessionAffinity: None  # 会话亲和性
+
+## Ingress 配置
+ingress:
+  enabled: false  # 是否启用 Ingress
+  className: nginx  # Ingress 类名
+  annotations: {}  # Ingress 注解
+  hosts:
+    - host: app.example.com  # 绑定域名
+      paths:
+        - path: /  # 路径
+          pathType: Prefix  # 路径类型
+  tls: []  # TLS 配置
+
+## 资源限制与请求
+resources:
+  limits:
+    cpu: 500m  # 最大 CPU
+    memory: 512Mi  # 最大内存
+  requests:
+    cpu: 250m  # 最小 CPU
+    memory: 256Mi  # 最小内存
+
+## 存活探针
+livenessProbe:
+  httpGet:
+    path: /health/live
+    port: http
+  initialDelaySeconds: 30  # 首次探测延迟
+  periodSeconds: 10  # 探测周期
+
+## 就绪探针
+readinessProbe:
+  httpGet:
+    path: /health/ready
+    port: http
+  initialDelaySeconds: 5  # 首次探测延迟
+  periodSeconds: 5  # 探测周期
+
+## 自动扩缩容
+autoscaling:
+  enabled: false  # 是否启用自动扩缩容
+  minReplicas: 2  # 最小副本数
+  maxReplicas: 10  # 最大副本数
+  targetCPUUtilizationPercentage: 80  # 目标 CPU 利用率
+  targetMemoryUtilizationPercentage: 80  # 目标内存利用率
+
+## Pod 弹性预算
+podDisruptionBudget:
+  enabled: true  # 是否启用 PDB
+  minAvailable: 1  # 最小可用副本数
+
+## 节点调度相关
+nodeSelector: {}  # 节点选择器
+tolerations: []  # 容忍
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 100
+      podAffinityTerm:
+        labelSelector:
+          matchExpressions:
+          - key: app.kubernetes.io/name
+            operator: In
+            values:
+            - '{{ include "my-app.name" . }}'
+        topologyKey: kubernetes.io/hostname
+
+## 环境变量
+env: []  # 额外环境变量
+# - name: LOG_LEVEL
+#   value: "info"
+
+## ConfigMap 配置
+configMap:
+  enabled: true  # 是否启用 ConfigMap
+  data: {}  # 配置数据
+#   APP_MODE: production
+#   DATABASE_HOST: postgres.example.com
+
+## Secret 配置（生产建议用外部 secret 管理）
+secrets:
+  enabled: false  # 是否启用 Secret
+  data: {}
+
+## 持久化存储
+persistence:
+  enabled: false  # 是否启用持久化
+  storageClass: ""  # 存储类
+  accessMode: ReadWriteOnce  # 访问模式
+  size: 10Gi  # 存储大小
+  annotations: {}  # 存储注解
+
+## PostgreSQL 依赖
+postgresql:
+  enabled: false  # 是否启用 PostgreSQL
+  auth:
+    database: myapp  # 数据库名
+    username: myapp  # 用户名
+    password: changeme  # 密码
+  primary:
+    persistence:
+      enabled: true  # 是否持久化
+      size: 10Gi  # 存储大小
+
+## Redis 依赖
+redis:
+  enabled: false  # 是否启用 Redis
+  auth:
+    enabled: false  # 是否启用认证
+  master:
+    persistence:
+      enabled: false  # 是否持久化
+
+## Prometheus ServiceMonitor
+serviceMonitor:
+  enabled: false  # 是否启用 ServiceMonitor
+  interval: 30s  # 采集间隔
+  scrapeTimeout: 10s  # 超时时间
+  labels: {}  # 额外标签
+
+## 网络策略
+networkPolicy:
+  enabled: false  # 是否启用网络策略
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress: []  # 入站规则
+  egress: []  # 出站规则
