@@ -18,6 +18,7 @@ skills/
 | Skill | 描述 |
 |-------|------|
 | [tencentcloud-terraform](skills/yanghuajun336/tencentcloud-terraform/) | 腾讯云 Terraform IaC 管理，支持 CVM/VPC/TKE/COS/CFS/DNSPod 等资源 |
+| [helm-chart-creator](skills/yanghuajun336/helm-chart-scaffolding/) | helm charts生成，支持 各类charts生成并推送到仓库|
 
 ## 使用方式
 
