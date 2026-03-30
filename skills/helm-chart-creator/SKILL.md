@@ -1,6 +1,6 @@
 ---
-name: helm-chart-scaffolding
-description: 计、组织和管理 Helm 图表，用于对 Kubernetes 应用程序进行模板化和打包，同时使用可重复使用的配置。在创建 Helm 图表、打包 Kubernetes 应用程序或实现模板化部署时使用。
+name: helm-chart-creator
+description: 设计、组织和管理 Helm 图表，用于对 Kubernetes 应用程序进行模板化和打包，同时使用可重复使用的配置。在创建 Helm 图表、打包 Kubernetes 应用程序或实现模板化部署时使用。
 license: MIT 
 ---
 
