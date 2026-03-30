@@ -1,3 +1,10 @@
+---
+name: Prometheus-dignose Skill
+description:  专为AI Agent/LangChain/Copilot/LlamaIndex等插件系统提供 Prometheus 指标、状态、告警等所有常规 API 封装
+license: MIT
+---
+
+
 # Prometheus-dignose Skill
 
 **为 AI Agent/LangChain/Copilot/LlamaIndex等插件系统提供 Prometheus 指标、状态、告警等所有常规 API 封装。**
